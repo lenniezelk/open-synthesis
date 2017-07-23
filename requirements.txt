@@ -1,41 +1,106 @@
-defusedxml~=0.4.1
-dj-database-url~=0.4.1
-Django~=1.10.2
-django-allauth~=0.27.0
-django-bootstrap-form~=3.2.1
-django-csp~=3.1
-django-environ~=0.4.0
-gunicorn~=19.6.0
-oauthlib~=2.0.0
-psycopg2~=2.6.2
-python-http-client~=2.2.1
-python-slugify~=1.2.1
-python3-openid~=3.0.10
-PyYAML~=3.12
-requests~=2.11.1
-requests-oauthlib~=0.7.0
-rollbar~=0.13.5
-sendgrid~=2.2.1
-sendgrid-django~=2.0.0
-six~=1.10.0
-smtpapi~=0.3.1
-Unidecode~=0.4.19
-whitenoise~=3.2.2
-django-pipeline~=1.6.8
-coverage~=4.0
-django-coverage-plugin~=1.3.1
-django-contrib-comments~=1.7.3
-django-field-history~=0.5.0
-pylibmc~=1.5.1
-django-pylibmc~=0.6.1
-nplusone~=0.7.2
-django-invitations~=1.7
-django-webpack-loader~=0.3.3
-qrcode~=5.3
-pillow~=3.4.0
-django-notifications-hq~=1.2
-pytz==2016.7
-celery~=3.1.24
-redis~=2.10.5
-beautifulsoup4~=4.5.1
-tldextract~=2.0.2
+## application server
+Django==1.11.3
+django-bootstrap-form==3.2.1
+django-braces==1.11.0
+django-contrib-comments==1.8.0
+django-pipeline==1.6.13
+pytz==2017.2
+whitenoise==3.3.0
+
+
+## configuration utils
+dj-database-url==0.4.2
+django-environ==0.4.3
+setoptconf==0.2.0
+
+
+## web utils
+beautifulsoup4==4.6.0
+bs4==0.0.1
+certifi==2017.4.17
+idna==2.5
+python-http-client==2.4.0
+python-slugify==1.2.4
+requests-file==1.4.2
+requests==2.18.1
+tldextract==2.1.0
+urllib3==1.22
+
+
+## security
+django-csp==3.3
+
+
+## file / format utilities
+anyjson==0.3.3
+chardet==3.0.4
+defusedxml==0.5.0
+PyYAML==3.12
+Unidecode==0.4.21
+
+
+## model utilities
+django-field-history==0.6.0
+django-model-utils==3.0.0
+jsonfield==2.0.2
+
+
+## python utilities
+blinker==1.4
+lazy-object-proxy==1.3.1
+six==1.10.0
+wrapt==1.10.10
+
+
+## build utilities
+django-webpack-loader==0.5.0
+
+
+## authentication and user management
+django-allauth==0.32.0
+django-invitations==1.9.1
+oauthlib==2.0.2
+python3-openid==3.1.0
+requests-oauthlib==0.8.0
+
+
+## application db
+psycopg2==2.7.2
+
+
+## cache
+django-pylibmc==0.6.1
+pylibmc==1.5.2
+
+
+## wsgi server
+gunicorn==19.7.1
+
+
+## error logging
+rollbar==0.13.12
+
+
+## task queue/runner
+amqp==2.2.1
+billiard==3.5.0.3
+celery==4.0.2
+kombu==4.1.0
+vine==1.1.4
+
+
+## task transport / result store
+redis==2.10.5
+
+
+## notifications / mailer
+django-notifications-hq==1.3
+sendgrid-django==4.0.4
+sendgrid==4.2.0
+smtpapi==0.3.1
+
+
+## donation qr code
+olefile==0.44
+Pillow==4.2.1
+qrcode==5.3

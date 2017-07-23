@@ -2,9 +2,11 @@ language: python
 
 python:
   - "3.5"
+  - "3.6"
 
 install:
   - pip install -r requirements.txt
+  - pip install -r requirements/development.txt
   - pip install coveralls coverage
   # Make sure we're running a modern node install
   # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html

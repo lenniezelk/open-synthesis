@@ -1,0 +1,11 @@
+## dynamic analysis
+nplusone==0.8.0
+
+## linters
+django-lint==2.0.4
+flake8==3.3.0
+prospector==0.12.7
+
+## coverage
+coverage==4.4.1
+django-coverage-plugin==1.5.0
