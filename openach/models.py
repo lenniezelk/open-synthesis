@@ -17,7 +17,7 @@ from django.urls import reverse, NoReverseMatch  # pylint: disable=no-name-in-mo
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
-from simple_history.models import HistoricalRecords
+import reversion
 
 
 # See database portability constraints here: https://docs.djangoproject.com/en/1.10/ref/databases/#character-fields
