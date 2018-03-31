@@ -16,8 +16,8 @@ from django.db.models import Q
 from django.urls import reverse, NoReverseMatch  # pylint: disable=no-name-in-module
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from field_history.tracker import FieldHistoryTracker
 from slugify import slugify
+from simple_history.models import HistoricalRecords
 
 
 # See database portability constraints here: https://docs.djangoproject.com/en/1.10/ref/databases/#character-fields
@@ -124,10 +124,10 @@ class Board(models.Model):
                     'and evidence are relevant')
     )
 
-    creator = models.ForeignKey(User, null=True)
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     pub_date = models.DateTimeField('date published')
     removed = models.BooleanField(default=False)
-    field_history = FieldHistoryTracker(['board_title', 'board_desc', 'removed'])
+    field_history = HistoricalRecords(excluded_fields=['board_slug', 'creator', 'pub_date'])
 
     objects = BoardModelManager()
     all_objects = models.Manager()
@@ -246,8 +246,8 @@ class Team(models.Model):
     invitation_required = models.BooleanField(default=True)
 
     create_timestamp = models.DateTimeField(auto_now_add=True)
+    field_history = HistoricalRecords(excluded_fields=['creator', 'owner', 'pub_date', 'members', 'create_timestamp'])
 
-    field_history = FieldHistoryTracker(['name', 'description', 'url', 'public', 'invitation_required'])
 
     def __str__(self):
         return self.name
@@ -273,6 +273,7 @@ class TeamRequest(models.Model):
         null=True,
         blank=True,
         related_name='+',
+        on_delete=models.SET_NULL
     )
 
     invitee = models.ForeignKey(
@@ -280,6 +281,7 @@ class TeamRequest(models.Model):
         null=True,
         blank=True,
         related_name='team_invites',
+        on_delete=models.SET_NULL
     )
 
     create_timestamp = models.DateTimeField(auto_now_add=True)
@@ -319,7 +321,7 @@ class BoardPermissions(models.Model):
         'read_comments',
     ]
 
-    board = models.OneToOneField(Board, related_name='permissions')
+    board = models.OneToOneField(Board, related_name='permissions', on_delete=models.CASCADE)
 
     collaborators = models.ManyToManyField(User, blank=True)
 
@@ -449,10 +451,10 @@ class Hypothesis(models.Model):
         'hypothesis',
         max_length=HYPOTHESIS_MAX_LENGTH
     )
-    creator = models.ForeignKey(User, null=True)
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     submit_date = models.DateTimeField('date added', auto_now_add=True)
     removed = models.BooleanField(default=False)
-    field_history = FieldHistoryTracker(['hypothesis_text', 'removed'])
+    field_history = HistoricalRecords(excluded_fields=['board', 'creator', 'submit_date'])
 
     objects = RemovableModelManager()
     all_objects = models.Manager()
@@ -476,7 +478,7 @@ class Evidence(models.Model):
 
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
-    creator = models.ForeignKey(User, null=True)
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     evidence_desc = models.CharField(
         'evidence description',
@@ -493,8 +495,7 @@ class Evidence(models.Model):
     submit_date = models.DateTimeField('date added', auto_now_add=True)
 
     removed = models.BooleanField(default=False)
-
-    field_history = FieldHistoryTracker(['evidence_desc', 'event_date', 'removed'])
+    field_history = HistoricalRecords(excluded_fields=['board', 'creator', 'submit_date'])
 
     objects = RemovableModelManager()
     all_objects = models.Manager()
@@ -546,7 +547,7 @@ class EvidenceSource(models.Model):
                     'Typically the date of the article or post'),
     )
 
-    uploader = models.ForeignKey(User)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE)
 
     submit_date = models.DateTimeField('date added', auto_now_add=True)
 
@@ -622,7 +623,7 @@ class ProjectNews(models.Model):
 
     content = models.CharField(max_length=1024)
     pub_date = models.DateTimeField('date published')
-    author = models.ForeignKey(User, null=True)
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
 
 @unique
@@ -652,7 +653,7 @@ class UserSettings(models.Model):
         (DigestFrequency.weekly.key, _('Weekly')),
     )
 
-    user = models.OneToOneField(User, related_name='settings')
+    user = models.OneToOneField(User, related_name='settings', on_delete=models.CASCADE)
 
     digest_frequency = models.PositiveSmallIntegerField(
         _('email digest frequency'),
@@ -665,6 +666,6 @@ class UserSettings(models.Model):
 class DigestStatus(models.Model):
     """Email digest status."""
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     last_success = models.DateTimeField(null=True, default=None)
     last_attempt = models.DateTimeField(null=True, default=None)

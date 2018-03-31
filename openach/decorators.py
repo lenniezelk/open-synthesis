@@ -16,7 +16,7 @@ def account_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
     """
     req = getattr(settings, 'ACCOUNT_REQUIRED', False)
     actual_decorator = user_passes_test(
-        lambda u: not req or u.is_authenticated(),
+        lambda u: not req or u.is_authenticated,
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
@@ -34,7 +34,7 @@ def cache_on_auth(timeout):
     def _decorator(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
-            key_prefix = "_auth_%s_" % request.user.is_authenticated()
+            key_prefix = "_auth_%s_" % request.user.is_authenticated
             return cache_page(timeout, key_prefix=key_prefix)(view_func)(request, *args, **kwargs)
         return _wrapped_view
     return _decorator
@@ -46,7 +46,7 @@ def cache_if_anon(timeout):
     def _decorator(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
-            if request.user.is_authenticated() or messages.get_messages(request):
+            if request.user.is_authenticated or messages.get_messages(request):
                 return view_func(request, *args, **kwargs)
             else:
                 return cache_page(timeout)(view_func)(request, *args, **kwargs)

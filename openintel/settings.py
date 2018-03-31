@@ -103,12 +103,12 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django_comments',
     'webpack_loader',
-    'field_history',
     'bootstrapform',
     'openach',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'simple_history',
     # notifications must appear after applications generating notifications
     'notifications',
     # invitations must appear after allauth: https://github.com/bee-keeper/django-invitations#allauth-integration
@@ -119,7 +119,7 @@ INSTALLED_APPS = [
 # This is using the pre-Django 1.10 middleware API. We'll need to update once the 3rd-party libraries are updated
 # to use the new API: https://docs.djangoproject.com/en/1.10/topics/http/middleware
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # LocaleMiddleware must come after SessionMiddleware and before CommonMiddleware
@@ -128,7 +128,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'field_history.middleware.FieldHistoryMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
@@ -142,7 +142,7 @@ MIDDLEWARE_CLASSES = [
 # Configure N+1 detection during DEBUG and TESTING; see https://github.com/jmcarp/nplusone
 if DEBUG or TESTING:
     INSTALLED_APPS.insert(0, 'nplusone.ext.django')
-    MIDDLEWARE_CLASSES.insert(0, 'nplusone.ext.django.NPlusOneMiddleware',)
+    MIDDLEWARE.insert(0, 'nplusone.ext.django.NPlusOneMiddleware',)
 
 NPLUSONE_RAISE = TESTING
 

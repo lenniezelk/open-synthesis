@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils import timezone
 from django_comments.models import Comment
-from field_history.models import FieldHistory
 
 from openach.models import Board, Evidence, Hypothesis, Evaluation, Eval, AuthLevels, BoardPermissions
 from openach.forms import BoardForm
@@ -97,7 +96,7 @@ class BoardFormTests(PrimaryUserTestCase):
         board.permissions.make_public()
 
         # board initially has 3 changed fields: title, description, and if it has been removed
-        self.assertEqual(FieldHistory.objects.get_for_model(board).count(), 3)
+        self.assertEqual(board.field_history.all().count(), 3)
 
         self.login()
 
@@ -110,8 +109,8 @@ class BoardFormTests(PrimaryUserTestCase):
         self.assertGreaterEqual(len(Board.objects.filter(board_desc='New Board Description')), 1)
 
         # check that field history was recorded
-        self.assertEqual(FieldHistory.objects.get_for_model_and_field(board, 'board_title').count(), 2)
-        self.assertEqual(FieldHistory.objects.get_for_model_and_field(board, 'board_desc').count(), 2)
+        self.assertEqual(board.field_history.filter(board_title='New Board Title').count(), 2)
+        self.assertEqual(board.field_history.filter(board_desc='New Board Description').count(), 2)
 
     def test_can_remove_board(self):
         """Test that staff can mark a board as removed via the form."""

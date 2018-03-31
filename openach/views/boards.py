@@ -19,7 +19,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods, require_safe
-from field_history.models import FieldHistory
 
 from openach.decorators import cache_if_anon, cache_on_auth, account_required
 from openach.forms import BoardCreateForm, BoardForm
@@ -234,7 +233,7 @@ def board_history(request, board_id):
     """Return a view with the modification history (board details, evidence, hypotheses) for the board."""
     # this approach to grabbing the history will likely be too slow for big boards
     def _get_history(models):
-        changes = [FieldHistory.objects.get_for_model(x).select_related('user') for x in models]
+        changes = [x.field_history.select_related('user') for x in models]
         return itertools.chain(*changes)
 
     board = get_object_or_404(Board, pk=board_id)
