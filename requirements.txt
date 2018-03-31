@@ -10,7 +10,7 @@ django-csp==3.4
 django-environ==0.4.4
 django-invitations==1.9.2
 django-pipeline==1.6.14
-django-simple-history==1.9.1
+django-reversion==2.0.13
 Django==2.0.3
 python-slugify==1.2.4
 qrcode==6.0
